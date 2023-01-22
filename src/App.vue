@@ -1,16 +1,19 @@
 <template>
   <div class="container">
     <category-list />
+    <news />
     <!-- <news /> -->
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import CategoryList from './CategoryList.vue'
+import News from './News.vue'
 // import News from 'vuemicro/News'
 export default defineComponent({
   components: {
     CategoryList,
+    News,
     // News
   }
 })
