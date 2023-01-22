@@ -1,9 +1,11 @@
 {
   "name": "skripsi-news",
   "version": "1.0.0",
+  "homepage": " https://muhammadchandra19.github.io/skripsi-news/",
   "scripts": {
     "dev": "webpack-dev-server --open --mode development",
-    "build": "webpack --config webpack.config.js --env --mode development"
+    "build": "webpack --config webpack.config.js --env  env=production --mode production",
+    "deploy": "gh-pages -d dist"
   },
   "author": "Muhammad chandra zulfikar",
   "license": "ISC",
@@ -24,6 +26,7 @@
     "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
+    "gh-pages": "^5.0.0",
     "vue": "^3.0.0"
   }
 }
