@@ -1,63 +1,60 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin")
-
-const publicPath =  process.argv.indexOf('env=production') >= 0 ? 'https://MuhammadChandra19.github.io/randomuser/' : '/'
-
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const { VueLoaderPlugin } = require("vue-loader");
+const path = require("path");
+const publicPath =  process.argv.indexOf('env=production') >= 0 ? 'https://MuhammadChandra19.github.io/skripsi-news/' : '/'
 module.exports = {
-    entry: path.resolve(__dirname, 'src', 'index.tsx'),
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        publicPath,
-        filename: 'bundle.js',
+	output: {
+    publicPath,
+  },
+
+  resolve: {
+    extensions: [".vue", ".tsx", ".ts", ".jsx", ".js", ".json"],
+  },
+
+  devServer: {
+    contentBase: path.join(__dirname, "public"),
+    port: 8081,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, content-type, Authorization",
     },
-    mode: 'development',
-    module: {
-        rules: [
-            {
-                test: /\.[jt]sx?$/,
-                use: ['babel-loader'],
-                exclude: /node_modules/,
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
-            },
-            {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader'],
-            },
-            {
-                test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-                type: 'asset/resource',
-            },
-            {
-                test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
-                type: 'asset/inline',
-            },
-        ],
-    },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.jsx'],
-    },
-    plugins: [
-        new ModuleFederationPlugin({
-          name: "news-container",
-          filename: "remoteEntry.js",
-          remotes: {},
-          exposes: {}
-        }),
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, './build/index.html'),
-        }),
-        new CleanWebpackPlugin(),
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
-    devServer: {
-        static: path.join(__dirname, './src'),
-        port: 3001,
-        hot: 'only',
-        compress: true,
-        open: true,
-    },
+  },
+
+  plugins: [
+    new VueLoaderPlugin(),
+    new ModuleFederationPlugin({
+      name: "vuehost",
+      filename: "remoteEntry.js",
+      remotes: {},
+      exposes: {},
+      shared: require("./package.json").dependencies,
+    }),
+    new HtmlWebPackPlugin({
+      template: "./public/index.html",
+    }),
+  ],
 }
