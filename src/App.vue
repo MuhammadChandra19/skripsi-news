@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <category-list />
+    <div>test</div>
     <!-- <news /> -->
   </div>
 </template>
